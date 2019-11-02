@@ -8,8 +8,11 @@ import Mouse from "./utils/mouse";
 export default class Render extends BaseRender {
   constructor() {
     super();
-    this.frame = 0;
+    this.showBackground = true;
     this.zoom = 5;
+    this.color1 = [240, 90, 0];
+    this.color2 = [245, 155, 0];
+    this.color3 = [10, 0, 245];
     this.start = Date.now();
     this.mouse = new Mouse();
     this.umouse = [0.0, 0.0, 0.0, 0.0];
@@ -20,7 +23,11 @@ export default class Render extends BaseRender {
 
   createGui = () => {
     this.options = {
-      zoom: this.zoom
+      zoom: this.zoom,
+      color1: this.color1,
+      color2: this.color2,
+      color3: this.color3,
+      showBackground: this.showBackground
     };
     this.gui = new dat.GUI();
     const folderRender = this.gui.addFolder("Render Options");
@@ -31,6 +38,22 @@ export default class Render extends BaseRender {
         this.zoom = value;
         this.gl.uniform1f(this.zm, this.zoom);
       });
+    folderRender.add(this.options, "showBackground").onFinishChange(value => {
+      this.showBackground = value;
+      this.gl.uniform1f(this.sb, this.showBackground);
+    });
+    folderRender.addColor(this.options, "color1").onChange(value => {
+      this.color1 = value;
+      this.gl.uniform3fv(this.c1, this.color1);
+    });
+    folderRender.addColor(this.options, "color2").onChange(value => {
+      this.color2 = value;
+      this.gl.uniform3fv(this.c2, this.color2);
+    });
+    folderRender.addColor(this.options, "color3").onChange(value => {
+      this.color3 = value;
+      this.gl.uniform3fv(this.c3, this.color3);
+    });
     folderRender.open();
   };
 
@@ -44,6 +67,16 @@ export default class Render extends BaseRender {
     this.ut = this.gl.getUniformLocation(this.program, "time");
     this.ms = this.gl.getUniformLocation(this.program, "mouse");
     this.zm = this.gl.getUniformLocation(this.program, "zoom");
+    this.c1 = this.gl.getUniformLocation(this.program, "colorA");
+    this.c2 = this.gl.getUniformLocation(this.program, "colorB");
+    this.c3 = this.gl.getUniformLocation(this.program, "colorC");
+    this.sb = this.gl.getUniformLocation(this.program, "show");
+
+    this.gl.uniform1f(this.zm, this.zoom);
+    this.gl.uniform1f(this.sb, this.showBackground);
+    this.gl.uniform3fv(this.c1, this.color1);
+    this.gl.uniform3fv(this.c2, this.color2);
+    this.gl.uniform3fv(this.c3, this.color3);
   };
 
   localUpdates = () => {
@@ -58,7 +91,6 @@ export default class Render extends BaseRender {
     this.tmouse[2] =
       this.tmouse[2] - (this.tmouse[2] - this.umouse[2]) * factor;
 
-    this.gl.uniform1f(this.zm, this.zoom);
     this.gl.uniform4fv(this.ms, this.tmouse);
   };
 

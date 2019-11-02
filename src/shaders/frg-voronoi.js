@@ -6,6 +6,10 @@ uniform vec2 resolution;
 uniform float time;
 uniform vec4 mouse;
 uniform float zoom;
+uniform vec3 colorA;
+uniform vec3 colorB;
+uniform vec3 colorC;
+uniform float show;
 
 #define PI  3.1415926
 #define PI2 6.2831853
@@ -19,11 +23,14 @@ vec2 hash2( vec2 p ) {
            )*4258.4373);
 }
 
-
 vec2 get_mouse(void) {
-    float ax = (mouse.x - resolution.x/2.)*.1;
-    float ay = (mouse.y - resolution.y/2.)*.1;  
-    return vec2(ax,ay);
+    float ax = 10.*mouse.x/resolution.x;
+    float ay = 10.*mouse.y/resolution.y;  
+    return (mouse.xy==vec2(0)) ? vec2(0.3,0.4) : vec2(ax,ay);
+}
+
+vec3 normal_color( vec3 x ) {
+    return (x-min(x,1.))/(max(x,255.)-min(x,1.));
 }
 
 // http://www.iquilezles.org/www/articles/voronoilines/voronoilines.htm
@@ -106,22 +113,25 @@ void main(void)
     
     // color top layer
     if(c.w<.25){
-       mate = vec3(.9, .6, .0);
+       mate = normal_color(colorC);
+       // vec3(.9, .6, .0);
     } else if (c.w<.5) {
-       mate = vec3(1., .35, .0);
+       mate = normal_color(colorB);
+       //vec3(1., .35, .0);
     } else if (c.w<.75) {
-       mate = vec3(.1, .0, 1.);
+       mate = normal_color(colorA); 
+       //vec3(.1, .0, 1.);
     } else {
        mate = vec3( .8 );
     }
     
     // color bottom layer
     if(backv.w<.25){
-       dmate =vec3(.0, 0., 1.4);
+       dmate =vec3(.3);
     } else if (backv.w<.5) {
-       dmate = vec3(.0, 1., 1.9);
+       dmate = vec3(.5);
     } else if (backv.w<.75) {
-       dmate = vec3(.0, 0., 1.1);
+       dmate = vec3(.7);
     } else {
        dmate = vec3( .8 );
     }
@@ -143,8 +153,11 @@ void main(void)
     // highlights and offsets
     vec3 hglt = clamp(sne + sle, 0., 1.);
 
+    // Check for background pattern
+    bkgnd = show < 1. ? vec3(.8) * diag : bkgnd;
+
     // Layering is hard and still quite frustating.. but this is pretty!
-    col = (border*.15) + bkgnd * sne + shade + border * sin(sle*2.4) - hglt*.5 * vec3(0, .4, .9);
+    col = (border*.15) + bkgnd * sne + shade + border * sin(sle*2.4) - hglt*.5;
     
     // Solo variations
     //col = vec3(4.5) * shade * diag + border * sin(sle*2.4);
