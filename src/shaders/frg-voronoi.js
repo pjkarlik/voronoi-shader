@@ -93,8 +93,11 @@ void main(void)
     vec2 buv = uv;
     uv.y -= time * .05;
     buv.y -= time * .053;
+    float back_zoom = zoom * 4.2;
+  
     uv *= zoom; 
-    
+    buv *= back_zoom; 
+  
     vec2 uid = vec2(
         floor(uv.x),
     		floor(uv.x)
@@ -102,27 +105,31 @@ void main(void)
     	
     vec4 c = voronoi( uv );
 	  vec4 inset = voronoi( uv + vec2(.09,.06));
-    vec4 backv = voronoi( buv * (zoom*3.5));
+    vec4 backv = voronoi( buv);
     
-	  vec3 sle = vec3(c.z - c.x);
+	vec3 sle = vec3(c.z - c.x);
     vec3 sne = vec3(c.y - c.x);
     
     vec3 col = vec3(1.);
- 	  vec3 mate = vec3(1.);
+ 	vec3 mate = vec3(1.);
     vec3 dmate = vec3(1.);
     
     // color top layer
     if(c.w<.25){
        mate = normal_color(colorC);
-       // vec3(.9, .6, .0);
     } else if (c.w<.5) {
        mate = normal_color(colorB);
-       //vec3(1., .35, .0);
     } else if (c.w<.75) {
        mate = normal_color(colorA); 
-       //vec3(.1, .0, 1.);
     } else {
-       mate = vec3( .8 );
+        if(show<1.){
+            vec2 f=fract(buv.xy * .75 +time)-0.5;
+   	        float checkrd = f.x*f.y>0.0?0.5:0.25;
+            mate *= checkrd;
+        } else {
+            mate = vec3( .8 );
+        }
+       
     }
     
     // color bottom layer
@@ -133,12 +140,12 @@ void main(void)
     } else if (backv.w<.75) {
        dmate = vec3(.7);
     } else {
-       dmate = vec3( .8 );
+       dmate = vec3(.9);
     }
   
     // Stripes from Shane https://www.shadertoy.com/view/XlXBzl
     // his stuff is amazing!
-    float diag = clamp(sin((uv.x - uv.y)*PI2*20.)*1. + .95, 0., 1.)*.05 + .05; 
+    float diag = clamp(sin((uv.x - uv.y)*PI2*40.)*1. + .95, 0., 1.)*.08 + .08; 
     
  	// background voronoi pattern
 	vec3 bkgnd = smoothstep( 0.01, 0.05, backv.x) * dmate;

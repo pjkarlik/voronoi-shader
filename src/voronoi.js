@@ -9,7 +9,7 @@ export default class Render extends BaseRender {
   constructor() {
     super();
     this.showBackground = true;
-    this.zoom = 5;
+    this.zoom = 8;
     this.color1 = [240, 90, 0];
     this.color2 = [245, 155, 0];
     this.color3 = [10, 0, 245];
