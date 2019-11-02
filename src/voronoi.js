@@ -10,9 +10,9 @@ export default class Render extends BaseRender {
     super();
     this.showBackground = true;
     this.zoom = 8;
-    this.color1 = [240, 90, 0];
-    this.color2 = [245, 155, 0];
-    this.color3 = [10, 0, 245];
+    this.color1 = [150, 102, 73];
+    this.color2 = [89, 96, 107];
+    this.color3 = [89, 95, 88];
     this.start = Date.now();
     this.mouse = new Mouse();
     this.umouse = [0.0, 0.0, 0.0, 0.0];
