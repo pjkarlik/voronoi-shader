@@ -145,7 +145,7 @@ void main(void)
   
     // Stripes from Shane https://www.shadertoy.com/view/XlXBzl
     // his stuff is amazing!
-    float diag = clamp(sin((uv.x - uv.y)*PI2*40.)*1. + .95, 0., 1.)*.08 + .08; 
+    float diag = clamp(sin((uv.x - uv.y)*PI2*30.)*1. + .95, 0., 1.)*.08 + .08; 
     
  	// background voronoi pattern
 	vec3 bkgnd = smoothstep( 0.01, 0.05, backv.x) * dmate;
