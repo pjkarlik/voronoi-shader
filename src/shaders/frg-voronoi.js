@@ -32,8 +32,8 @@ vec2 get_mouse(void) {
 vec4 voronoi( in vec2 x )
 {
     vec2 mouse = get_mouse();
-    x.x += mouse.x*.5;
-    x.y += mouse.y*.5;
+    x.x += mouse.x*.25;
+    x.y += mouse.y*.25;
     
 	float wave = (time*.7) + mouse.x; // mouse.x; // time;
     
