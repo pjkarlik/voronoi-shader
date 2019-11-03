@@ -24,8 +24,8 @@ vec2 hash2( vec2 p ) {
 }
 
 vec2 get_mouse(void) {
-    float ax = 10.*mouse.x/resolution.x;
-    float ay = 10.*mouse.y/resolution.y;  
+    float ax = 20.*mouse.x/resolution.x;
+    float ay = 20.*mouse.y/resolution.y;  
     return (mouse.xy==vec2(0)) ? vec2(0.3,0.4) : vec2(ax,ay);
 }
 
