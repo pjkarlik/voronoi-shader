@@ -19,7 +19,7 @@ In mathematics, a Voronoi diagram is a partitioning of a plane into regions base
 
 ## Run the example
 
-Requires Node v10.15.03 or greater
+Requires Node v12.18.3 or greater
 
 ```bash
 $ yarn install
